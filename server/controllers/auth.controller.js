@@ -10,7 +10,7 @@ const registerUser = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       user = await User.create({
-        userName,
+        username,
         email,
       });
     }
@@ -21,7 +21,7 @@ const registerUser = async (req, res) => {
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    return res.status(200).json("User authenticated successfully", user);
+    return res.status(200).json({success: true , message : "user authenticated success", user});
   } catch (er) {
     res.status(500).json({ success: false, message: er });
   }

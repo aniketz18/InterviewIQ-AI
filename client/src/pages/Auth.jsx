@@ -1,17 +1,27 @@
 import React from "react";
+import axios from "axios";
 import { BsRobot } from "react-icons/bs";
 import { IoSparkles } from "react-icons/io5";
 import { FcGoogle } from "react-icons/fc";
 import { motion } from "motion/react";
 import { signInWithPopup } from "firebase/auth";
+import { ServerUrl } from "../App";
 import { auth, provider } from "../utils/firebase";
+
 function Auth({ isModel = false }) {
   const handleGoogleAuth = async () => {
     try {
       const res = await signInWithPopup(auth, provider);
-      console.log(res.user.displayName);
-      console.log(res.user.email);
-      /*     google auth setup is done and it can give response as username, email etc...now only need to send the data for backend storage */
+      let User = res.user;
+      let username = User.displayName;
+      let email = User.email;
+      const result = await axios.post(
+        ServerUrl + "/api/auth/google",
+        { username, email },
+        { withCredentials: true },
+      );
+      console.log(result);
+      // now the task authenticated success
     } catch (error) {
       console.log(error);
     }
